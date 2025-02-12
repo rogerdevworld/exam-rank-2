@@ -12,26 +12,18 @@
 
 #include <unistd.h>
 
-void	ft_putchar(char c)
+int     main(int argc, char **argv)
 {
-	write(1, &c, 1);
-}
-
-int	main(int ac, char **av)
-{
-	int	i;
-
-	i = 0;
-	if (ac == 2)
+	if (argc == 2)
 	{
-		while (av[1][i] == ' ' || av[1][i] == '\t')
+		int     i = 0;
+		while (argv[1][i] && argv[1][i] == ' ' || argv[1][i] == '\t')
 			i++;
-		while (av[1][i] != '\0' && av[1][i] != ' ' && av[1][i] != '\t')
+		while (argv[1][i] && argv[1][i] != ' ' && argv[1][i] != '\t')
 		{
-			ft_putchar(av[1][i]);
+			write(1, &argv[1][i], 1);
 			i++;
 		}
 	}
-	ft_putchar('\n');
-	return (0);
+	write(1, "\n", 1);
 }
