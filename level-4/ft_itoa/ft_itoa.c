@@ -1,68 +1,33 @@
-// Passed Moulinette 2019.09.01
-
 #include <stdlib.h>
 
-int		absolute_value(int nbr)
+void ft_itoa_re(int n, char *str, int &i)
 {
-	if (nbr < 0)
-		return (-nbr);
-	return (nbr);
+    if (n == -2147483648)
+    {
+        str[(*i)++] = '-';
+        str[(*i)++] = '2';
+        ft_itoa_re(147483648, str, i);
+    }
+    else
+    {
+        if (n < 0)
+        {
+            str[(*i)++] = '-';
+            n = -n;
+        }
+        if (n > 9)
+            ft_itoa_re(n / 10, str, i);
+        str[(*i)++] = (n % 10) + '0';
+    }
 }
-
-int		get_len(int nbr)
+char *ft_itoa(int n)
 {
-	int len = 0;
-	if (nbr <= 0)
-		++len;
-	while (nbr != 0)
-	{
-		++len;
-		nbr = nbr / 10;
-	}
-	return (len);
+    int i = 0;
+    char *str;
+    str = malloc(12);
+    if (!str)
+        return (NULL);
+    ft_itoa_re(n, str, &i);
+    str[i] = '\0';
+    return (str);    
 }
-
-char	*ft_itoa(int nbr)
-{
-	char *result;
-	int len;
-
-	len = get_len(nbr);
-	result = malloc(sizeof(char) * (len + 1));
-	result[len] = '\0';
-
-	if (nbr < 0)
-		result[0] = '-';
-	else if (nbr == 0)
-		result[0] = '0';
-
-	while (nbr != 0)
-	{
-		--len;
-		result[len] = absolute_value(nbr % 10) + '0';
-		nbr = nbr / 10;
-	}
-	return (result);
-}
-
-//-------------------------------------------------------
-// #include <stdio.h>
-// #include <limits.h>
-
-// int		main(void)
-// {
-// 	int d = INT_MIN;
-// 	printf("%d =? %s\n", d, ft_itoa(d));
-
-// 	d = -13;
-// 	printf("%d =? %s\n", d, ft_itoa(d));
-
-// 	d = 0;
-// 	printf("%d =? %s\n", d, ft_itoa(d));
-
-// 	d = 5;
-// 	printf("%d =? %s\n", d, ft_itoa(d));
-
-// 	d = INT_MAX;
-// 	printf("%d =? %s\n", d, ft_itoa(d));
-// }
