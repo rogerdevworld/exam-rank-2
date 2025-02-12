@@ -1,72 +1,39 @@
 #include <stdlib.h>
+#include <stdio.h>
 
-int	ft_wordlen(char *str)
+char	**ft_split(char *s)
 {
+	int		i = 0, j, k = 0, wc = 0;
+	char	**res;
+
+	while (s[i]) wc += (s[i] > 32 && (s[i + 1] <= 32 || !s[i + 1])), i++;
+	res = malloc((wc + 1) * sizeof(char *));
+	if (!res) return (NULL);
+	i = 0;
+	while (s[i])
+	{
+		while (s[i] && s[i] <= 32) i++;
+		if (!s[i]) break ;
+		j = i;
+		while (s[j] && s[j] > 32) j++;
+		res[k] = malloc(j - i + 1);
+		int l = 0;
+		while (i < j) res[k][l++] = s[i++];
+		res[k++][l] = '\0';
+	}
+	res[k] = 0;
+	return (res);
+}
+
+int	main(void)
+{
+	char **words = ft_split("  Hola   mundo  esto es  una prueba ");
 	int i = 0;
 
-	while (str[i] != '\0' && str[i] != ' ' && str[i] != '\t' && str[i] != '\n')
-		++i;
-	return (i);
-}
-
-char	*word_dupe(char *str)
-{
-	int i = 0;
-	int len = ft_wordlen(str);
-	char *word = malloc(sizeof(char) * (len + 1));
-	
-	word[len] = '\0';
-	while (i < len)
+	while (words[i])
 	{
-		word[i] = str[i];
-		++i;
+		printf("'%s'\n", words[i]);
+		i++;
 	}
-	return (word);
-}
-
-void	fill_words(char **array, char *str)
-{
-	int word_index = 0;
-	
-	while (*str == ' ' || *str == '\t' || *str == '\n')
-		++str;
-	while (*str != '\0')
-	{
-		array[word_index] = word_dupe(str);
-		++word_index;
-		while (*str != '\0' && *str != ' ' && *str != '\t' && *str != '\n')
-			++str;
-		while (*str == ' ' || *str == '\t' || *str == '\n')
-			++str;
-	}
-}
-
-int		count_words(char *str)
-{
-	int num_words = 0;
-	
-	while (*str == ' ' || *str == '\t' || *str == '\n')
-		++str;
-	while (*str != '\0')
-	{
-		++num_words;
-		while (*str != '\0' && *str != ' ' && *str != '\t' && *str != '\n')
-			++str;
-		while (*str == ' ' || *str == '\t' || *str == '\n')
-			++str;
-	}
-	return (num_words);
-}
-
-char	**ft_split(char *str)
-{
-	int		num_words;
-	char	**array;
-	
-	num_words = count_words(str);
-	array = malloc(sizeof(char *) * (num_words + 1));
-	
-	array[num_words] = 0;
-	fill_words(array, str);
-	return (array);
+	return (0);
 }
