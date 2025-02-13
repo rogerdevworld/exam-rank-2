@@ -1,6 +1,58 @@
 #include <stdlib.h>
 #include <stdio.h>
 
+#include <stdlib.h>
+#include <stdio.h>
+
+char	*ft_strncpy(char *dest, char *src, int len)
+{
+	int i = 0;
+	while(src[i] && i < len)
+	{
+		dest[i] = src[i];
+		i++;
+	}
+	dest[i] = '\0';
+	return (dest);
+}
+
+char	**ft_split(char *str)
+{
+	int	i = 0;
+	int	j = 0;
+	int	k = 0;
+	int	count = 0;
+	//contador de palabras 
+	while(str[i])
+	{
+		while(str[i] == ' ' || str[i] == '\n' || str[i] == '\t')
+			i++;
+		if (str[i])
+			count++;
+		while(str[i] && str[i] != ' ' && str[i] != '\n' && str[i] != '\t')
+			i++;
+	}
+	char **split = (char **)malloc((count + 1) * sizeof(char *));
+	i = 0;
+	while (str[i])
+	{
+		while(str[i] == ' ' || str[i] == '\n' || str[i] == '\t')
+			i++;
+		j = i;
+		while(str[i]  && str[i] != ' ' && str[i] != '\n' && str[i] != '\t')
+			i++;
+		if (i > j)
+		{
+			split[k] = malloc((i - j + 1) * sizeof(char));
+			ft_strncpy(split[k++], &str[j], i - j);
+		}
+	}
+	split[k] = NULL;
+	return (split);
+}
+
+/*
+//min version
 char	**ft_split(char *s)
 {
 	int		i = 0, j, k = 0, wc = 0;
@@ -24,7 +76,7 @@ char	**ft_split(char *s)
 	res[k] = 0;
 	return (res);
 }
-
+*/
 int	main(void)
 {
 	char **words = ft_split("  Hola   mundo  esto es  una prueba ");
