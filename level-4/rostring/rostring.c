@@ -1,63 +1,74 @@
-// Passed Moulinette 2019.09.01
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h> 
 
-#include <unistd.h>
-
-int		skip_whitespace(char *str, int i)
+void ft_putstr(char *str)
 {
-	while (str[i] == ' ' || str[i] == '\t')
-		++i;
-	return (i);
+    int i = 0;
+    while (str[i])
+    {
+        write(1, &str[i], 1);
+        i++;
+    }
 }
 
-int		ft_wordlen(char *str)
+void ft_strcpy(char *dest, char *src, int len)
 {
-	int i = 0;
-
-	while (str[i] != '\0' && str[i] != ' ' && str[i] != '\t')
-		++i;
-	return (i);
+    int i = 0;
+    while (i < len)
+    {
+        dest[i] = src[i];
+        i++;
+    }
+    dest[i] = '\0';
 }
 
-int		print_word(char *str, int i, int *is_first)
+char **ft_split(char *str)
 {
-	int word_len;
-
-	i = skip_whitespace(str, i);
-	word_len = ft_wordlen(str + i);
-	if (*is_first == 0)
-		write(1, " ", 1);
-	write(1, str + i, word_len);
-	*is_first = 0;
-	return (i + word_len);
+    int i = 0;
+    int j = 0;
+    int k = 0;
+    int count = 0;
+    //count words
+    while (str[i])
+    {
+        while (str[i] == ' ' || str[i] == '\t' || str[i] == '\n')
+            i++;
+        if (str[i])
+            count++;
+        while (str[i] && str[i] != ' ' && str[i] != '\t' && str[i] != '\n')
+            i++;
+    }
+    i = 0;
+    char **split = (char **)malloc((count + 1) * sizeof(char *));
+    while (str[i])
+    {
+        while (str[i] == ' ' || str[i] == '\t' || str[i] == '\n')
+            i++;
+        j = i;
+        while (str[i] && str[i] != ' ' && str[i] != '\t' && str[i] != '\n')
+            i++;
+        split[k] = malloc(i - j + 1);
+        ft_strcpy(split[k++], &str[j], i - j);
+    }
+    split[k] = NULL;
+    return (split);
 }
 
-int		epur_str(char *str)
+int main()
 {
-	int i = 0;
-	int is_first = 1;
-
-	i = skip_whitespace(str, i);
-	while (str[i] != '\0')
-	{
-		i = print_word(str, i, &is_first);
-		i = skip_whitespace(str, i);
-	}
-	return (is_first);
-}
-
-int		main(int argc, char **argv)
-{
-	if (argc >= 2)
-	{
-		char *str = argv[1];
-		int i = 0;
-		int is_first;
-
-		i = skip_whitespace(str, i);
-		i = i + ft_wordlen(str + i);
-		is_first = epur_str(str + i);
-		print_word(str, 0, &is_first);
-	}
-	write(1, "\n", 1);
-	return (0);
+    int i = 0;
+    int j = 0;
+    char **split  = ft_split("Hello World New Words Apply Yours Songs");
+    while (split[i])
+        i++;
+    ft_putstr(split[--i]);
+    while (j < i)
+    {
+        ft_putstr(" ");
+        ft_putstr(split[j]);
+        j++;
+    }
+    //ft_putstr("$");
+    return 0;
 }
